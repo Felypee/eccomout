@@ -1,31 +1,33 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput } from 'react-native';
+import React, { useState } from 'react';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Ionicons } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import CreditCardModal from './credit-card-modal';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const PayButton = () => {
-    const handleButtonPress = () => {
-        console.log('Floating button pressed');
-    };
-    const cartItemCount = 3;
+const PayButton = ({ onPress }: any) => {
+    const cartItems = useSelector((state: any) => state.cart.items);
+
     return (
-        <TouchableOpacity style={styles.floatingButton} onPress={handleButtonPress}>
-            <View style={styles.container}>
-                <Text style={styles.buttonText}>Pay with credit card</Text>
-                <View style={styles.cartIconContainer}>
-                    <Ionicons name="cart-outline" size={35} color="white" />
-                    {cartItemCount > 0 && (
-                        <View style={styles.cartItemCount}>
-                            <Text style={styles.cartItemCountText}>{cartItemCount}</Text>
-                        </View>
-                    )}
+        <>
+            <TouchableOpacity style={styles.floatingButton} onPress={onPress}>
+                <View style={styles.container}>
+                    <Text style={styles.buttonText}>Pay with credit card</Text>
+                    <View style={styles.cartIconContainer}>
+                        <Ionicons name="cart-outline" size={35} color="white" />
+                        {cartItems.length > 0 && (
+                            <View style={styles.cartItemCount}>
+                                <Text style={styles.cartItemCountText}>{cartItems.length}</Text>
+                            </View>
+                        )}
+                    </View>
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </>
     );
 };
 
-export default PayButton;
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
@@ -73,4 +75,24 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
     },
+    inputLabel: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    inputField: {
+        height: verticalScale(40),
+        borderColor: '#D91656',
+        borderWidth: 2,
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        fontSize: 16,
+        marginBottom: verticalScale(10),
+    },
+    cardTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: verticalScale(10),
+    },
 });
+export default PayButton;

@@ -1,9 +1,19 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import ShoppingCartButton from './shopping-cart-button';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '@/states/cart/slice';
+import AddedButton from './added-button';
 
 const ProductItem = ({ item }: any) => {
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state: any) => state.cart.items);
+    const isProductInCart = cartItems.some((product: any) => product.id === item.id);
+
+    const handleAddToCart = () => {
+        dispatch(addToCart(item));
+    };
     return (
         <View style={styles.productContainer}>
             <Image source={item.image} style={styles.image} />
@@ -17,7 +27,7 @@ const ProductItem = ({ item }: any) => {
                     right: scale(10),
                 }}
             >
-                <ShoppingCartButton />
+                {isProductInCart ? <AddedButton /> : <ShoppingCartButton onPress={handleAddToCart} />}
             </View>
         </View>
     );
