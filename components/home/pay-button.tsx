@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
-import CreditCardModal from './credit-card-modal';
+
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const PayButton = ({ onPress }: any) => {
