@@ -1,111 +1,41 @@
+import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { moderateScale } from 'react-native-size-matters'; // If you're using this library
 
-// Sample product data
-const productos = [
-    {
-        id: '1',
-        name: 'Watch',
-        price: 20.5,
-        originalPrice: 40.0,
-        image: require('../../assets/images/banner-product.png'),
-    },
-    {
-        id: '2',
-        name: 'Watch',
-        price: 20.5,
-        originalPrice: 40.0,
-        image: require('../../assets/images/banner-product.png'),
-    },
-    {
-        id: '3',
-        name: 'Watch',
-        price: 20.5,
-        originalPrice: 40.0,
-        image: require('../../assets/images/banner-product.png'),
-    },
-    {
-        id: '4',
-        name: 'Watch',
-        price: 20.5,
-        originalPrice: 40.0,
-        image: require('../../assets/images/banner-product.png'),
-    },
-];
+import { verticalScale } from 'react-native-size-matters';
+import ProductItem from './product-item';
 
-const ProductGrid = () => {
+// Generate 50 sample products
+const productos = Array.from({ length: 30 }, (_, index) => ({
+    id: `${index + 1}`, // Unique ID for each product
+    name: `Product ${index + 1}`, // Product name
+    price: (Math.random() * 50 + 10).toFixed(2), // Random price
+    originalPrice: (Math.random() * 50 + 20).toFixed(2), // Random original price
+    image: require('../../assets/images/banner-product.png'), // Ensure a valid image path
+}));
+
+export const ProductGridList = ({ quantity }: any) => {
+    // Render each product item
+    const renderItem = ({ item }: any) => <ProductItem item={item} />;
+
     return (
-        <View style={styles.gridContainer}>
-            <View style={styles.row}>
-                {productos.slice(0, 2).map((item) => (
-                    <View key={item.id} style={styles.productContainer}>
-                        <Image source={item.image} style={styles.image} />
-                        <Text style={styles.productName}>{item.name}</Text>
-                        <Text style={styles.productPrice}>${item.price}</Text>
-                        <Text style={styles.originalPrice}>${item.originalPrice}</Text>
-                    </View>
-                ))}
-            </View>
-
-            <View style={styles.row}>
-                {productos.slice(2, 4).map((item) => (
-                    <View key={item.id} style={styles.productContainer}>
-                        <Image source={item.image} style={styles.image} />
-                        <Text style={styles.productName}>{item.name}</Text>
-                        <Text style={styles.productPrice}>${item.price}</Text>
-                        <Text style={styles.originalPrice}>${item.originalPrice}</Text>
-                    </View>
-                ))}
-            </View>
-        </View>
+        <FlatList
+            data={productos.slice(0, quantity)} // Data array
+            renderItem={renderItem} // Function to render each item
+            keyExtractor={(item) => item.id} // Unique key for each item
+            numColumns={2} // Number of columns in the grid
+            contentContainerStyle={styles.listContainer} // Container style for the FlatList
+            columnWrapperStyle={styles.row} // Style for rows (applies when numColumns > 1)
+            showsVerticalScrollIndicator={false} // Hides the vertical scrollbar
+        />
     );
 };
 
 const styles = StyleSheet.create({
-    gridContainer: {
-        margin: 10,
+    listContainer: {
+        paddingBottom: verticalScale(20), // Padding at the bottom
     },
     row: {
-        flexDirection: 'row', // Items are displayed in a row
-        justifyContent: 'space-between', // Distribute space between items
-        marginBottom: 10, // Space between rows
-    },
-    productContainer: {
-        flex: 1,
-
-        borderRadius: 10,
-        alignItems: 'flex-start',
-        padding: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-
-        elevation: 3,
-    },
-    image: {
-        height: 150,
-        width: 150,
-        borderRadius: 20,
-    },
-    productName: {
-        fontWeight: '600',
-        fontSize: moderateScale(15),
-        paddingTop: 4,
-        paddingLeft: 4,
-    },
-    productPrice: {
-        fontWeight: '600',
-        fontSize: moderateScale(14),
-        paddingTop: 1,
-        paddingLeft: 4,
-    },
-    originalPrice: {
-        fontWeight: '400',
-        fontSize: moderateScale(12),
-        color: 'gray',
-        paddingLeft: 4,
-        textDecorationLine: 'line-through', // Strike-through the original price
+        justifyContent: 'space-between', // Space between columns
+        marginBottom: verticalScale(10), // Space between rows
     },
 });
-
-export default ProductGrid;

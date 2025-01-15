@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { FlatList, View, Image, Text, StyleSheet } from 'react-native';
-import { verticalScale, moderateScale } from 'react-native-size-matters';
+import { verticalScale, moderateScale, scale } from 'react-native-size-matters';
 export const categories = [
     { name: 'Electronics', image: require('../../assets/images/electronics_category.png') },
     { name: 'Fashion', image: require('../../assets/images/fashion_category.png') },
@@ -29,7 +29,7 @@ const CategoriesList = ({ categories }: any) => {
     const renderItem = ({ item }: any) => <CategoryItem name={item.name} image={item.image} />;
 
     return (
-        <View style={{ height: 110 }}>
+        <View style={{ height: verticalScale(100) }}>
             <FlatList
                 data={categories} // List of categories to render
                 horizontal // Enables horizontal scrolling
@@ -55,10 +55,13 @@ const styles = StyleSheet.create({
         marginTop: verticalScale(5), // Vertical margin for top spacing
         paddingVertical: 10, // Vertical padding inside the item
         paddingHorizontal: 7, // Horizontal padding inside the item
-        borderColor: 'gray', // Border color for the item
-        borderWidth: 0.2, // Thin border for visual separation
         borderRadius: 20, // Rounded corners for aesthetic
-        width: 120,
+        width: scale(100),
+        backgroundColor: 'white',
+        elevation: 3,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        height: verticalScale(80),
     },
     categoryImage: {
         borderRadius: 10, // Rounded corners for the image

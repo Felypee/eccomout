@@ -1,61 +1,63 @@
-import { View, Text, Image, ScrollView } from 'react-native';
-import React from 'react';
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import EcommerceSafeAreaView from '@/components/common/ecommerce-safearea-view';
 import { moderateScale, verticalScale } from 'react-native-size-matters';
 import BannerProduct from '@/components/home/banner-product';
 import CategoriesList, { categories } from '@/components/home/categories-list';
-import ProductGrid from '@/components/home/product-grid';
+
+import { useRouter } from 'expo-router';
+import { ProductGridList } from '@/components/home/product-grid';
+import SectionHeader from '@/components/home/section-header';
+import PayButton from '@/components/home/pay-button';
+import CreditCardModal from '@/components/home/credit-card-modal';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Home = () => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const closeModal = () => {
+        setModalVisible(false);
+    };
+
+    const handlePay = () => {
+        setModalVisible(true);
+    };
     return (
-        <EcommerceSafeAreaView>
-            <ScrollView
-                contentContainerStyle={{ paddingBottom: verticalScale(5) }}
-                showsVerticalScrollIndicator={false}
-            >
-                <BannerProduct />
-                <View style={{ paddingVertical: verticalScale(20) }}>
-                    <Text
-                        style={{
-                            fontWeight: '800',
-                            fontSize: moderateScale(18),
-                        }}
-                    >
-                        Categories
-                    </Text>
-                </View>
-                <CategoriesList categories={categories} />
-                <View
-                    style={{
-                        paddingVertical: verticalScale(20),
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                    }}
+        <GestureHandlerRootView>
+            <EcommerceSafeAreaView>
+                <ScrollView
+                    contentContainerStyle={{ paddingBottom: verticalScale(5) }}
+                    showsVerticalScrollIndicator={false}
                 >
-                    <Text
-                        style={{
-                            fontWeight: '800',
-                            fontSize: moderateScale(18),
-                        }}
-                    >
-                        Latest products
-                    </Text>
-                    <Text
-                        style={{
-                            fontWeight: '700',
-                            fontSize: moderateScale(16),
-                            color: '#0A5EB0',
-                            borderBottomWidth: 1,
-                            borderBottomColor: '#0A5EB0',
-                        }}
-                    >
-                        See all
-                    </Text>
-                </View>
-                <ProductGrid />
-            </ScrollView>
-        </EcommerceSafeAreaView>
+                    <SectionHeader title={'Hola, bienvenidx'} />
+                    <BannerProduct />
+                    <SectionHeader title={'Categories'} />
+                    <CategoriesList categories={categories} />
+                    <SectionHeader title={'Latest products'} />
+                    <ProductGridList quantity={30} />
+                </ScrollView>
+
+                {modalVisible ? (
+                    <>
+                        <View
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: modalVisible ? '#0009' : 'transparent',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                            }}
+                        ></View>
+                        <CreditCardModal modalVisible={modalVisible} closeModal={closeModal} />
+                    </>
+                ) : (
+                    <View>
+                        <PayButton onPress={handlePay} />
+                    </View>
+                )}
+            </EcommerceSafeAreaView>
+        </GestureHandlerRootView>
     );
 };
 
